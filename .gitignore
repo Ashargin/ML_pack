@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.csv
+
+.cache/
+.pytest_cache/
+
+info.log
+errors.log
