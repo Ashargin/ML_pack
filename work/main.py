@@ -2,9 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import time
 
-from work.getData import load_no_nan
+from work.get_data import load_no_nan
 from work.models import LinReg1, LinReg2, LinReg3, LinReg4, RidgeReg, EN, HuberReg, RFR, AdaBoostReg, GBR, RFQR
-from work.ModelError import ModelError
+from work.model_error import ModelError
 from work.utils import sim_model, get_rfqr_interval
 
 ## Data/settings

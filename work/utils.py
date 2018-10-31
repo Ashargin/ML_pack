@@ -3,8 +3,8 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import pandas as pd
 
-from work.getData import load_no_nan
-from work.ModelError import ModelError
+from work.get_data import load_no_nan
+from work.model_error import ModelError
 
 
 def check_na(X, show_all=False):
