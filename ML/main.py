@@ -5,7 +5,7 @@ import time
 from utils.get_data import load_no_nan
 from ML.models import LinReg1, LinReg2, RidgeReg, EN, HuberReg, RFR, AdaBoostReg, GBR, RFQR
 from ML.model_error import ModelError
-from utils.utils import sim_model
+from ML.utils import sim_model
 from utils.settings import DATA_PATH, TARGET_COLS
 
 ## Data/settings

@@ -13,6 +13,8 @@ from sklearn.model_selection import GridSearchCV
 
 from ML.preprocessing import preproc_linreg, preproc_filled_discrete
 from utils.utils import no_outliers
+from utils.get_data import load
+from utils.settings import TEST_DATA_PATH
 
 
 # Base model
@@ -28,7 +30,7 @@ class BaseModel:
             self.data_val = data_val
         else:
             self.fit(self.data)
-            self.data_val = self.data
+            self.data_val = self.preprocessing(load(TEST_DATA_PATH))
 
     def fit(self, data):
         preproc = self.preprocessing(data)
