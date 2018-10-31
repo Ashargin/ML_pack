@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# from notebooks.getData import *
+from utils.settings import TARGET_COLS
 
 # Settings
 sns.set()
@@ -10,16 +10,10 @@ sns.set_style('whitegrid')
 
 
 class ModelError:
-    def __init__(self, model):
+    def __init__(self, model, pred_var=TARGET_COLS[0]):
         self.model = model
-
-        # self.data = load_noNaN('all-ads-2018.05.01_prepared', columns = ['EXPENSES_M2'])
-        # self.data.reset_index(inplace=True)
-        # self.data = self.data.sample(frac=0.1)
         self.data = self.model.data_val.copy()
-
-        self.pred_var = 'CONDOMINIUM_EXPENSES'
-
+        self.pred_var = pred_var
         self._run_predict()
 
     def _run_predict(self):

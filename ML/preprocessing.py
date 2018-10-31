@@ -1,20 +1,14 @@
-dummyVals = {'FANCY_ZONE': ['AUTRE', 'IDF_HORS_PARIS', 'PARIS'],
-             'HEATING_ZONE': ['H1c', 'H1a', 'H2d', 'H3', 'H1b', 'H2c', 'H2b', 'H2a'],
-             'REGION': ['AUVERGNE_RHONE_ALPES', 'HAUTS_DE_FRANCE',
-                        'PROVENCE_ALPES_COTE_DAZUR', 'GRAND_EST', 'OCCITANIE',
-                        'IDF_HORS_PARIS', 'NORMANDIE', 'NOUVELLE_AQUITAINE',
-                        'CENTRE_VAL_DE_LOIRE', 'BOURGOGNE_FRANCHE_COMTE',
-                        'BRETAGNE', 'PAYS_DE_LA_LOIRE', 'PARIS']}
+from utils.settings import DUMMY_VALS
 
 
 def preproc_numeric(data):
     data_temp = data.reset_index(drop=True)
     X = data_temp[
-        ['CARETAKER', 'ELEVATOR', 'PARKING', 'SURFACE', 'MAIN_CITY', 'HEATING_MODE', 'CONSTRUCTION_YEAR', 'FLOOR',
-         'FLOOR_COUNT', 'LOT_COUNT']].copy()
+        ['CARETAKER', 'ELEVATOR', 'PARKING', 'SURFACE', 'HEATING_MODE', 'CONSTRUCTION_YEAR', 'FLOOR',
+         'MAIN_CITY', 'LOT_COUNT', 'FLOOR_COUNT']].copy()
     for var in ['FANCY_ZONE', 'HEATING_ZONE', 'REGION']:
         i = 0
-        for val in dummyVals[var]:
+        for val in DUMMY_VALS[var]:
             if i > 0:
                 X[var + '_' + val] = (data_temp[var] == val)
             i += 1
@@ -34,8 +28,8 @@ def preproc_filled_discrete(data):
 def preproc_linreg(data):
     data_temp = data.reset_index(drop=True)
     X = data_temp[
-        ['SURFACE', 'CARETAKER', 'HEATING_MODE', 'ELEVATOR', 'FLOOR', 'LOT_COUNT', 'CONSTRUCTION_YEAR', 'PARKING',
-         'MAIN_CITY', 'HEATING_ZONE', 'REGION', 'DEPT_CODE', 'ZIP_CODE']].copy()
+        ['CARETAKER', 'ELEVATOR', 'PARKING', 'SURFACE', 'HEATING_MODE', 'CONSTRUCTION_YEAR', 'FLOOR',
+         'MAIN_CITY', 'LOT_COUNT', 'HEATING_ZONE', 'REGION', 'DEPT_CODE', 'ZIP_CODE']].copy()
     X.HEATING_MODE.fillna(0.0, inplace=True)
     X['LOT_COUNT_CAT'] = X.LOT_COUNT.apply(format_lot_count)
     return X.set_index(data.index)

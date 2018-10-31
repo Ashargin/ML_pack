@@ -2,23 +2,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import time
 
-from work.get_data import load_no_nan
-from work.models import LinReg1, LinReg2, LinReg3, LinReg4, RidgeReg, EN, HuberReg, RFR, AdaBoostReg, GBR, RFQR
-from work.model_error import ModelError
-from work.utils import sim_model, get_rfqr_interval
+from utils.get_data import load_no_nan
+from ML.models import LinReg1, LinReg2, RidgeReg, EN, HuberReg, RFR, AdaBoostReg, GBR, RFQR
+from ML.model_error import ModelError
+from utils.utils import sim_model
+from utils.settings import DATA_PATH, TARGET_COLS
 
 ## Data/settings
-data = load_no_nan('all-ads-2018.05.01_prepared',
-                   columns=['EXPENSES_M2', 'HEATING_MODE', 'CONSTRUCTION_YEAR', 'FLOOR', 'FLOOR_COUNT', 'LOT_COUNT',
-                            'PRICE'])
-data.reset_index(inplace=True)  # car CARETAKER est en index
-
-data_full = load_no_nan('all-ads-2018.05.01_prepared', columns=['EXPENSES_M2'])
-data_full.reset_index(inplace=True)
-
-data_temp = data_full[
-    data_full[['HEATING_MODE', 'CONSTRUCTION_YEAR', 'FLOOR', 'FLOOR_COUNT', 'LOT_COUNT', 'PRICE']].isna().any(axis=1)]
-data_custom = pd.concat([data, data_temp.sample(frac=data.shape[0] / data_temp.shape[0])])
+# data = load_no_nan(DATA_PATH, columns=[col1, col2, col3] + TARGET_COLS)
+# data_full = load_no_nan(DATA_PATH, columns=TARGET_COLS)
+# data_custom = do_something()
 
 n_sim = 1
 
@@ -57,7 +50,7 @@ sim_model(GBR, data_full, n_sim=n_sim)
 ModelError(GBR(data_full)).plot_error_distrib(color='firebrick')
 
 # Random forest quantiles
-sim_model(RFQR, data[:1000], n_sim=n_sim)
+sim_model(RFQR, data_full, n_sim=n_sim)
 ModelError(RFQR(data_full)).plot_error_distrib(color='red')
 
 ## Model choice
@@ -71,15 +64,6 @@ rf.grid_search_cv(parameters)
 rf.get_feature_importances()
 
 ## Quantiles prediction
-rfqr = RFQR(data_full)
+rfqr = RFQR(data_custom)
 toy_data = data[:10]
 quantile_preds = rfqr.predict(toy_data, quantiles=[0.05, 0.15, 0.375, 0.625, 0.85, 0.95])
-
-intervals_width, intervals_rel_width = get_rfqr_interval(data_custom, quantiles=[0.05, 0.15, 0.375, 0.625, 0.85, 0.95],
-                                                         test_sample=1000, n_sim=100)
-
-rfqr = RFQR(data_custom)
-time_start = time.time()
-for i in range(100):
-    pred = rfqr.predict(data[:1], quantiles=[0.05, 0.15, 0.375, 0.625, 0.85, 0.95])
-time_lapse = (time.time() - time_start) / 100

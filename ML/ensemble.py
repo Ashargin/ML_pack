@@ -6,7 +6,7 @@ from skgarden.quantile.utils import weighted_percentile
 from sklearn.ensemble.forest import ForestRegressor
 from sklearn.utils import check_array, check_X_y
 
-from work.tree import MyDecisionTreeQuantileRegressor
+from ML.tree import MyDecisionTreeQuantileRegressor
 
 
 class MyRandomForestQuantileRegressor(ForestRegressor):

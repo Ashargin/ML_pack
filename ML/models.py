@@ -7,12 +7,12 @@ from sklearn.linear_model import HuberRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor
-from work.ensemble import MyRandomForestQuantileRegressor
+from ML.ensemble import MyRandomForestQuantileRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 
-from work.preprocessing import preproc_linreg, preproc_filled_discrete
-from work.utils import no_outliers
+from ML.preprocessing import preproc_linreg, preproc_filled_discrete
+from utils.utils import no_outliers
 
 
 # Base model
@@ -105,20 +105,6 @@ class LinReg2(LinReg):
         self.name = 'Linear regression'
         formula = 'HEATING_MODE:REGION + CARETAKER:REGION + ELEVATOR + PARKING + ' \
                   'SURFACE -1'
-        super().__init__(data, formula, sub_pred_var=sub_pred_var, val_split=val_split)
-
-
-class LinReg3(LinReg):
-    def __init__(self, data, sub_pred_var='EXPENSES_M2', val_split=False):
-        self.name = 'Linear regression'
-        formula = 'CARETAKER + HEATING_MODE + ELEVATOR:LOT_COUNT_CAT + CONSTRUCTION_YEAR -1'
-        super().__init__(data, formula, sub_pred_var=sub_pred_var, val_split=val_split)
-
-
-class LinReg4(LinReg):
-    def __init__(self, data, sub_pred_var='EXPENSES_M2', val_split=False):
-        self.name = 'Linear regression'
-        formula = 'CARETAKER:LOT_COUNT_CAT + HEATING_MODE + ELEVATOR + CONSTRUCTION_YEAR + PARKING + HEATING_ZONE -1'
         super().__init__(data, formula, sub_pred_var=sub_pred_var, val_split=val_split)
 
 
