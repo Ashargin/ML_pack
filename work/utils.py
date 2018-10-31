@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
 import pandas as pd
 
 from work.getData import load_no_nan
@@ -109,3 +112,68 @@ def no_outliers(data):
                                | (data.LOT_COUNT.isna()))
                             ]
     return data_no_outliers
+
+
+def plot_2D(X, Y, title='', xlabel='', ylabel='') :
+    plt.figure()
+    plt.scatter(X, Y)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.show()
+
+
+def plot_3D(X, Y, Z, title='', xlabel='', ylabel='') :
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(X, Y, Z)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.show()
+
+
+def cluster_plot_2D(x, assign, k, title='', xlabel='', ylabel='') :
+    n = len(x)
+    plt.figure()
+    colors = []
+    if k <= 11:
+        colors = np.array(['blue', 'red', 'forestgreen', 'gold', 'darkviolet', 'darkorange', 
+                                'gray', 'black', 'deepskyblue', 'firebrick', 'lightgreen'])
+    else :
+        cmap = plt.cm.get_cmap('nipy_spectral', k)
+        colors = [cmap(i) for i in range(k)]
+    plot_colors = []
+    for i in range(n):
+        plot_colors.append(colors[assign[i]])
+    X = np.array([x[i][0] for i in range(n)])
+    Y = np.array([x[i][1] for i in range(n)])
+    plt.scatter(X, Y, c=plot_colors)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.show()
+
+
+def cluster_plot_3D(x, assign, k, title='', xlabel='', ylabel='') :
+    n = len(x)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    colors = []
+    if k <= 11:
+        colors = np.array(['blue', 'red', 'forestgreen', 'gold', 'darkviolet', 'darkorange', 
+                                'gray', 'black', 'deepskyblue', 'firebrick', 'lightgreen'])
+    else :
+        cmap = plt.cm.get_cmap('nipy_spectral', k)
+        colors = [cmap(i) for i in range(k)]
+    plot_colors = []
+    for i in range(n):
+        plot_colors.append(colors[assign[i]])
+    X = np.array([x[i][0] for i in range(n)])
+    Y = np.array([x[i][1] for i in range(n)])
+    Z = np.array([x[i][2] for i in range(n)])
+    ax.scatter(X, Y, Z, c=plot_colors)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.show()
