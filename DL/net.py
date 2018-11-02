@@ -10,8 +10,8 @@ import time
 
 device_setting = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 device = torch.device(device_setting)
-print('Using ' + ('cpu' if device_setting == 'cpu' else 
-    'cuda device {}'.format(torch.cuda.get_device_name(0))))
+print('Using ' + ('cpu' if device_setting == 'cpu' else
+                  'cuda device {}'.format(torch.cuda.get_device_name(0))))
 
 
 class LinearNet(nn.Module):
