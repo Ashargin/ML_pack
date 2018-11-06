@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from utils.settings import TARGET_COLS
+from utils.settings import TARGET_COL
 
 # Settings
 sns.set()
@@ -10,7 +10,7 @@ sns.set_style('whitegrid')
 
 
 class ModelError:
-    def __init__(self, model, pred_var=TARGET_COLS[0]):
+    def __init__(self, model, pred_var=TARGET_COL):
         self.model = model
         self.data = self.model.data_val.copy()
         self.pred_var = pred_var

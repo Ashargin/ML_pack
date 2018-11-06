@@ -1,8 +1,8 @@
 from ML.model_error import ModelError
-from utils.settings import TARGET_COLS
+from utils.settings import TARGET_COL
 
 
-def sim_model(Model, data, pred_var=TARGET_COLS[0], sub_pred_var=None, n_sim=1):
+def sim_model(Model, data, pred_var=TARGET_COL, sub_pred_var=None, n_sim=1):
     mean_err = 0
     median_err = 0
     mean_err_rel = 0

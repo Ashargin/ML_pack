@@ -5,8 +5,8 @@ import pickle
 from sklearn.model_selection import train_test_split
 
 from utils.get_data import load
-from utils.settings import DATA_PATH, TEST_DATA_PATH, \
-    TRAIN_PREPROC_PATH, TEST_PREPROC_PATH, MEDIANS_PATH, STDS_PATH
+from utils.settings import DATA_PATH, VAL_DATA_PATH, TEST_DATA_PATH, \
+    TRAIN_PREPROC_PATH, TEST_PREPROC_PATH, VAL_PREPROC_PATH, MEDIANS_PATH, STDS_PATH
 
 outlier_threshold = 30
 dummy_vals = {
@@ -46,7 +46,7 @@ def denormalize(y, target_cols):
     cols_medians = [medians[c] for c in target_cols]
     cols_stds = [stds[c] for c in target_cols]
 
-    return y * cols_stds + cols_medians  ###
+    return y * cols_stds + cols_medians
 
 
 def preprocessing(data, first_stage=False, normalize_data=True):
@@ -78,15 +78,15 @@ def preprocessing(data, first_stage=False, normalize_data=True):
 
 
 def generate_preproc_if_not_done(split=True, test_size=0.3, low_memory=True, regenerate=False):
-    if not os.path.isfile(TRAIN_PREPROC_PATH) or not os.path.isfile(TEST_PREPROC_PATH) or regenerate:
+    if not os.path.isfile(TRAIN_PREPROC_PATH) or not os.path.isfile(VAL_PREPROC_PATH) or regenerate:
         print('Generating preprocessed datasets')
-        train_data, test_data = None, None
+        train_data, val_data = None, None
         if split:
             data = load(DATA_PATH, low_memory=low_memory)
-            train_data, test_data = train_test_split(data, test_size=test_size)
+            train_data, val_data = train_test_split(data, test_size=test_size)
         else:
             train_data = load(DATA_PATH, low_memory=low_memory)
-            test_data = load(TEST_DATA_PATH, low_memory=low_memory)
+            val_data = load(VAL_DATA_PATH, low_memory=low_memory)
 
         data_first_stage = train_data.copy()
         preproc_first_stage = None
@@ -112,6 +112,11 @@ def generate_preproc_if_not_done(split=True, test_size=0.3, low_memory=True, reg
             pickle.dump(stds, file)
 
         train_preproc = preprocessing(train_data.copy())
-        test_preproc = preprocessing(test_data.copy())
+        val_preproc = preprocessing(val_data.copy())
         train_preproc.to_csv(TRAIN_PREPROC_PATH)
-        test_preproc.to_csv(TEST_PREPROC_PATH)
+        val_preproc.to_csv(VAL_PREPROC_PATH)
+
+        if TEST_DATA_PATH is not None:
+            test_data = load(TEST_DATA_PATH, low_memory=low_memory)
+            test_preproc = preprocessing(test_data.copy())
+            test_preproc.to_csv(TEST_PREPROC_PATH)

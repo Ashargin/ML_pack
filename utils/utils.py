@@ -41,6 +41,14 @@ def no_outliers(data):
     return data_no_outliers
 
 
+def sub_pred_to_pred(y_pred, X, sub_pred_var):
+    if 'LOG' in sub_pred_var:
+        y_pred = np.exp(y_pred)
+    if 'M2' in sub_pred_var:
+        y_pred = y_pred.multiply(X.SURFACE, axis=0)
+    return y_pred
+
+
 def plot_2D(X, Y, title='', xlabel='', ylabel=''):
     plt.figure()
     plt.scatter(X, Y)

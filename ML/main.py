@@ -6,11 +6,11 @@ from utils.get_data import load_no_nan
 from ML.models import LinReg1, LinReg2, RidgeReg, EN, HuberReg, RFR, AdaBoostReg, GBR, RFQR
 from ML.model_error import ModelError
 from ML.utils import sim_model
-from utils.settings import DATA_PATH, TARGET_COLS
+from utils.settings import DATA_PATH, TARGET_COL
 
 ## Data/settings
-# data = load_no_nan(DATA_PATH, columns=[col1, col2, col3] + TARGET_COLS)
-# data_full = load_no_nan(DATA_PATH, columns=TARGET_COLS)
+# data = load_no_nan(DATA_PATH, columns=[col1, col2, col3, TARGET_COL])
+# data_full = load_no_nan(DATA_PATH, columns=[TARGET_COL])
 # data_custom = do_something()
 
 n_sim = 1
