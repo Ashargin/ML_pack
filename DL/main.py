@@ -21,7 +21,7 @@ net = LinearNet([116, 50, 16, 1])
 
 # train net
 criterion = nn.L1Loss()  # RMSELoss()
-optimizer = optim.SGD(net.parameters(), lr=0.0001, momentum=0.9)
+optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.1)
 
 net.start_training(X_train_loader, criterion=criterion, optimizer=optimizer, epochs=0.5)
 

@@ -19,7 +19,7 @@ dummy_vals = {
                   '972'], 'HEATING_ZONE': ['H1c', 'H1a', 'H2d', 'H3', 'H1b', 'H2c', 'H2b', 'H2a']}
 
 
-def normalize(df, medians=None, stds=None):
+def normalize(df, medians=None, stds=None, with_target=False):
     if medians is None:
         with open(MEDIANS_PATH, 'rb') as file:
             medians = pickle.load(file)
@@ -28,9 +28,10 @@ def normalize(df, medians=None, stds=None):
             stds = pickle.load(file)
 
     for c in df.columns:
-        df[c] = df[c] - medians[c]
-        if stds[c] != 0:
-            df[c] = df[c] / stds[c]
+        if c != 'CONDOMINIUM_EXPENSES' or with_target:
+            df[c] = df[c] - medians[c]
+            if stds[c] != 0:
+                df[c] = df[c] / stds[c]
 
     return df
 
@@ -38,8 +39,8 @@ def normalize(df, medians=None, stds=None):
 def denormalize(y, target_cols):
     medians = None
     stds = None
-    with open(r'D:\Scripts python\mc-ocr\data\temp\Contrat Assurance_17038047.pdf_document.pkl', 'rb') as file:
-        txt = pickle.load(file)
+    with open(MEDIANS_PATH, 'rb') as file:
+        medians = pickle.load(file)
     with open(STDS_PATH, 'rb') as file:
         stds = pickle.load(file)
 
@@ -50,7 +51,7 @@ def denormalize(y, target_cols):
 
 
 def preprocessing(data, first_stage=False, normalize_data=True):
-    cols = ['CONSTRUCTION_YEAR', 'ELEVATOR', 'FLOOR', 'FLOOR_COUNT', 'HEATING_MODE', 'LOT_COUNT', 'PRICE', 'SURFACE',
+    cols = ['CONSTRUCTION_YEAR', 'ELEVATOR', 'FLOOR', 'FLOOR_COUNT', 'HEATING_MODE', 'LOT_COUNT', 'PRICE', 'SURFACE', 'CARETAKER',
             'CONDOMINIUM_EXPENSES']
     dummy_cols = ['DEPT_CODE', 'HEATING_ZONE']
 
@@ -68,11 +69,14 @@ def preprocessing(data, first_stage=False, normalize_data=True):
     if not first_stage:
         if normalize_data:
             data = normalize(data)  # normalize
+        for c in data.columns:
+            if c != 'CONDOMINIUM_EXPENSES':
+                data[c] = data[c].mul(data[c].abs() < outlier_threshold)
         data.fillna(0.0, inplace=True)  # fillna
     elif normalize_data:
         medians = data.median()
         stds = data.std()
-        data = normalize(data, medians=medians, stds=stds)
+        data = normalize(data, medians=medians, stds=stds, with_target=True)
 
     return data.astype('float')
 

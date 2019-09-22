@@ -112,3 +112,33 @@ def cluster_plot_3D(x, assign, k, title='', xlabel='', ylabel=''):
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.show()
+
+
+def plot_distrib(error, color=None, show_mean=False, name=None, xlim=(0, 1), ylim=0):
+        error = error.sort_values()
+        x = np.linspace(0, 1, len(error))
+
+        if color is None:
+            if name is None:
+                plt.plot(x, error)
+            else:
+                plt.plot(x, error, label='Erreurs : ' + name)
+        else:
+            if name is None:
+                plt.plot(x, error, color=color)
+            else:
+                plt.plot(x, error, label='Erreurs : ' + name, color=color)
+        if show_mean:
+            m = error.mean()
+            if name is None:
+                plt.plot([0, 1], [m, m])
+            else:
+                plt.plot([0, 1], [m, m], label='Erreur moyenne : ' + name)
+        if xlim is not None:
+            plt.xlim(xlim)
+        if ylim is not None:
+            plt.ylim(ylim)
+        plt.xlabel('Probabilité')
+        plt.ylabel("Quantiles d'erreurs")
+        plt.title('Distribution des erreurs')
+        plt.legend(loc='upper left')
